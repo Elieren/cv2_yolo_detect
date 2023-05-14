@@ -11,7 +11,7 @@ detector.loadModel()
 
 custom_objects = detector.CustomObjects(car=True, bicycle=True)
 
-cap = cv2.VideoCapture('123.mp4')
+cap = cv2.VideoCapture('123.mp4') # Путь к файлу видео
 
 while True:
     success, img = cap.read()

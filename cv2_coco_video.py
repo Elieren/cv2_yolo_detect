@@ -19,15 +19,31 @@ layers_names = net.getLayerNames()
 output_layers = [layers_names[i - 1] for i in net.getUnconnectedOutLayers()]
 
 # Загрузка изображения
-cap = cv2.VideoCapture('123.mp4')
+cap = cv2.VideoCapture('./video/1234567.mp4')
+
+#==================================================================================
+
+frames_per_second = 60
+
+output_file_path = '608'
+output_video_filepath = output_file_path + '.mp4'
+
+frame_width = int(cap.get(3))
+frame_height = int(cap.get(4))
+output_video = cv2.VideoWriter(output_video_filepath, cv2.VideoWriter_fourcc(*"MP4V"),
+                                frames_per_second,
+                                (frame_width, frame_height))
+
+#==================================================================================
+
 
 while True:
     success, img = cap.read()
     if not success:
         break
-    img = cv2.resize(img, (0, 0), None, 0.5, 0.5)
+    img = cv2.resize(img, (0, 0), None, 1, 1)
     # Преобразование изображения в формат, который может обработать модель
-    blob = cv2.dnn.blobFromImage(img, scalefactor=0.00392, size=(416, 416), mean=(0, 0, 0), swapRB=True, crop=False)
+    blob = cv2.dnn.blobFromImage(img, scalefactor=0.00392, size=(608, 608), mean=(0, 0, 0), swapRB=True, crop=False)
 
     # Запуск распознавания объектов
     net.setInput(blob)
@@ -65,9 +81,12 @@ while True:
             color = colors[class_ids[i]]
             cv2.rectangle(img, (x, y), (x + w, y + h), color, 1)
             cv2.putText(img, label, (x, y + 10), cv2.FONT_HERSHEY_COMPLEX, 0.3, color, 1)
+    
+    output_video.write(img)
 
     # Отображение изображения с распознанными объектами
     cv2.imshow('Image', img)
     cv2.waitKey(1)
 
+output_video.release()
 cv2.destroyAllWindows()

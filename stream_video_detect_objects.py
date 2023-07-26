@@ -5,7 +5,7 @@ execution_path = os.getcwd()
 
 detector = VideoObjectDetection()
 detector.setModelTypeAsYOLOv3()
-detector.setModelPath( os.path.join(execution_path , "yolov3/yolov3.pt"))
+detector.setModelPath(os.path.join(execution_path, "yolov3/yolov3.pt"))
 detector.loadModel()
 
 video_path = detector.detectObjectsFromVideo(

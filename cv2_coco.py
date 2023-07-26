@@ -1,9 +1,9 @@
 import cv2
 import numpy as np
 
-config_file = 'yolov3/yolov3.cfg' # Путь к файлу конфигурации модели
-weights_file = 'yolov3/yolov3.weights' # Путь к файлу весов модели
-classes_file = 'yolov3/coco.names' # Путь к файлу с названиями классов
+config_file = 'yolov3/yolov3.cfg'  # Путь к файлу конфигурации модели
+weights_file = 'yolov3/yolov3.weights'  # Путь к файлу весов модели
+classes_file = 'yolov3/coco.names'  # Путь к файлу с названиями классов
 
 # Список названий классов
 classes = []
@@ -20,7 +20,8 @@ output_layers = [layers_names[i - 1] for i in net.getUnconnectedOutLayers()]
 img = cv2.imread('image/2cars_people.jpeg')
 
 # Преобразование изображения в формат, который может обработать модель
-blob = cv2.dnn.blobFromImage(img, scalefactor=0.00392, size=(416, 416), mean=(0, 0, 0), swapRB=True, crop=False)
+blob = cv2.dnn.blobFromImage(img, scalefactor=0.00392, size=(416, 416),
+                             mean=(0, 0, 0), swapRB=True, crop=False)
 
 # Запуск распознавания объектов
 net.setInput(blob)

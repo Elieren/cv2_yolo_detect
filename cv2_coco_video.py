@@ -1,9 +1,9 @@
 import cv2
 import numpy as np
 
-config_file = 'yolov3/yolov3.cfg' # Путь к файлу конфигурации модели
-weights_file = 'yolov3/yolov3.weights' # Путь к файлу весов модели
-classes_file = 'yolov3/coco.names' # Путь к файлу с названиями классов
+config_file = 'yolov3/yolov3.cfg'  # Путь к файлу конфигурации модели
+weights_file = 'yolov3/yolov3.weights'  # Путь к файлу весов модели
+classes_file = 'yolov3/coco.names'  # Путь к файлу с названиями классов
 
 # Список названий классов
 classes = []
@@ -21,7 +21,7 @@ output_layers = [layers_names[i - 1] for i in net.getUnconnectedOutLayers()]
 # Загрузка изображения
 cap = cv2.VideoCapture('./video/1234567.mp4')
 
-#==================================================================================
+# ==================================================================================
 
 frames_per_second = 60
 
@@ -30,11 +30,14 @@ output_video_filepath = output_file_path + '.mp4'
 
 frame_width = int(cap.get(3))
 frame_height = int(cap.get(4))
-output_video = cv2.VideoWriter(output_video_filepath, cv2.VideoWriter_fourcc(*"MP4V"),
-                                frames_per_second,
-                                (frame_width, frame_height))
+output_video = cv2.VideoWriter(
+    output_video_filepath,
+    cv2.VideoWriter_fourcc(*"MP4V"),
+    frames_per_second,
+    (frame_width, frame_height)
+    )
 
-#==================================================================================
+# ==================================================================================
 
 
 while True:
@@ -43,7 +46,8 @@ while True:
         break
     img = cv2.resize(img, (0, 0), None, 1, 1)
     # Преобразование изображения в формат, который может обработать модель
-    blob = cv2.dnn.blobFromImage(img, scalefactor=0.00392, size=(608, 608), mean=(0, 0, 0), swapRB=True, crop=False)
+    blob = cv2.dnn.blobFromImage(img, scalefactor=0.00392, size=(608, 608),
+                                 mean=(0, 0, 0), swapRB=True, crop=False)
 
     # Запуск распознавания объектов
     net.setInput(blob)
@@ -73,15 +77,16 @@ while True:
     # Нанесение ограничивающих прямоугольников на изображение
     indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
     font = cv2.FONT_HERSHEY_PLAIN
-    #colors = np.random.uniform(0, 255, size=(len(classes), 3))
+    # colors = np.random.uniform(0, 255, size=(len(classes), 3))
     for i in range(len(boxes)):
         if i in indexes:
             x, y, w, h = boxes[i]
             label = str(classes[class_ids[i]])
             color = colors[class_ids[i]]
             cv2.rectangle(img, (x, y), (x + w, y + h), color, 1)
-            cv2.putText(img, label, (x, y + 10), cv2.FONT_HERSHEY_COMPLEX, 0.3, color, 1)
-    
+            cv2.putText(img, label, (x, y + 10),
+                        cv2.FONT_HERSHEY_COMPLEX, 0.3, color, 1)
+
     output_video.write(img)
 
     # Отображение изображения с распознанными объектами

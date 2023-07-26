@@ -19,9 +19,12 @@ output_video_filepath = output_file_path + '.mp4'
 
 frame_width = int(cap.get(3))
 frame_height = int(cap.get(4))
-output_video = cv2.VideoWriter(output_video_filepath, cv2.VideoWriter_fourcc(*"MP4V"),
-                                frames_per_second,
-                                (frame_width, frame_height))
+output_video = cv2.VideoWriter(
+    output_video_filepath,
+    cv2.VideoWriter_fourcc(*"MP4V"),
+    frames_per_second,
+    (frame_width, frame_height)
+    )
 
 while True:
     success, img = cap.read()
@@ -35,18 +38,19 @@ while True:
     )
 
     for eachObject in detections:
-        print(eachObject["name"] , " : ", eachObject["percentage_probability"], " : ", eachObject["box_points"] )
+        print(eachObject["name"], " : ", eachObject["percentage_probability"],
+              " : ", eachObject["box_points"])
         name = eachObject["name"]
         x, y, w, h = eachObject["box_points"]
         if name == 'person':
             cv2.rectangle(img, (x, y), (w, h), (0, 255, 0), 1)
             cv2.putText(img, name, (x + 2, y + 8),
-                    cv2.FONT_HERSHEY_COMPLEX, 0.3, (0, 0, 255), 1)
+                        cv2.FONT_HERSHEY_COMPLEX, 0.3, (0, 0, 255), 1)
         else:
             cv2.rectangle(img, (x, y), (w, h), (80, 127, 255), 1)
             cv2.putText(img, name, (x + 2, y + 8),
-                    cv2.FONT_HERSHEY_COMPLEX, 0.3, (0, 0, 255), 1)
-    
+                        cv2.FONT_HERSHEY_COMPLEX, 0.3, (0, 0, 255), 1)
+
     output_video.write(img)
 
     cv2.imshow("WebCam", img)
